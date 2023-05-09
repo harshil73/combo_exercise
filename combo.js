@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
-const port = 5555
+const port = 5678
+
+app.use(express.json())
 
 app.set('view engine','ejs')
 

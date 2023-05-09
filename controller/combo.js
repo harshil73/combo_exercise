@@ -1,29 +1,56 @@
 const model = require("../models");
-// console.log(model.control_type)
 const select_combo = require("../models").select_combo;
 const option_combo = require("../models").option_combo;
 
 console.log(select_combo, option_combo);
 
-const generateData = (req, res) => {
-  option_combo
-    .bulkCreate([
-      { option: "Hindi", selectId: 3 },
-      { option: "Gujarati", selectId: 3 },
-      { option: "English", selectId: 3 },
-    ])
-    .then((data) => {
-      console.log(data);
-      res.json(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+const addSelectMenu = async(req,res)=>{
+  let select = req.query.select;
+  console.log(select)
 
-// generate html -> switch -> return generate dropdown
-// generate dropdown(select,option) =>
-// concat -> return html
+  let add_select = await select_combo.create({
+    name:select
+  })
+  console.log(add_select)
+  res.send(add_select)
+}
+
+const addOptionMenu = async(req,res)=>{
+  let x = req.body;
+  console.log(x)
+
+  let add_options = await option_combo.bulkCreate(req.body)
+  console.log(add_options)
+  res.json(add_options)
+}
+
+
+const removeOptionMenu = async(req,res)=>{
+  let id = req.query.optionid;
+  console.log(id)
+
+  let remove_option = await option_combo.destroy({
+   where:{
+    selectId:id
+   }
+  })
+  console.log(remove_option)
+  res.send(`Options Deleted Successfully!`)
+}
+
+const removeSelectMenu = async(req,res)=>{
+  let select_name = req.query.select;
+  console.log(select_name)
+
+  let remove_select = await select_combo.destroy({
+    where:{
+      name:select_name
+    }
+  })
+  console.log(remove_select)
+  res.send(`${select_name} Deleted Successfully!`)
+}
+
 
 function checkboxData(data) {
   let checkbox = "";
@@ -63,11 +90,11 @@ const choice = async (req, res) => {
 
 // ------------------------------------------------------------
 // Reduce Redundancy(Final Code)
-   if (control == "Languages") {
+   if (control == "languages") {
     let data = await select_combo.findAll({
       include: option_combo,
       where: {
-        name: "Languages",
+        name: "languages",
       },
     });
     if(type == 'dropdown')
@@ -78,12 +105,11 @@ const choice = async (req, res) => {
     res.send(checkboxData(data[0].option_combos));
   }
 
-
-  else if (control == "State") {
+  else if (control == "state") {
     let data = await select_combo.findAll({
       include: option_combo,
       where: {
-        name: "State",
+        name: "state",
       },
     });
     if(type == 'dropdown')
@@ -94,11 +120,26 @@ const choice = async (req, res) => {
     res.send(checkboxData(data[0].option_combos));
   }
 
-  else if (control == "Gender") {
+  else if (control == "gender") {
     let data = await select_combo.findAll({
       include: option_combo,
       where: {
-        name: "Gender",
+        name: "gender",
+      },
+    });
+    if(type == 'dropdown')
+    res.send(dropDownData(data[0].option_combos));
+    if(type=='radio')
+    res.send(radioData(data[0].option_combos));
+    if(type=='checkbox')
+    res.send(checkboxData(data[0].option_combos));
+  }
+
+  else if (control == "movie") {
+    let data = await select_combo.findAll({
+      include: option_combo,
+      where: {
+        name: "movie",
       },
     });
     if(type == 'dropdown')
@@ -113,6 +154,9 @@ const choice = async (req, res) => {
     res.send('404 plz enter proper url')
   }
 
+};
+
+module.exports = {choice, addSelectMenu, addOptionMenu, removeOptionMenu, removeSelectMenu};
 
 
 // First Attempt Code
@@ -221,6 +265,3 @@ const choice = async (req, res) => {
 //     });
 //     res.send(dropDownData(data[0].option_combos));
 //   }
-};
-
-module.exports = { generateData, choice };

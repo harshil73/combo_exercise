@@ -1,11 +1,12 @@
-const { Router } = require("express")
+const { Router } = require("express");
 const router = Router();
 
-const adddata = require('../controller/combo').generateData
-const choice = require('../controller/combo').choice
-// console.log(generatecombo)
+let {choice,addSelectMenu,addOptionMenu,removeOptionMenu,removeSelectMenu} = require("../controller/combo");
 
-router.get('/adddata',adddata)
 router.get('/choice',choice)
+router.get('/add_select',addSelectMenu)
+router.post('/add_option',addOptionMenu)
+router.get('/remove_option',removeOptionMenu)
+router.get('/remove_select',removeSelectMenu)
 
-module.exports=router
+module.exports = router;
