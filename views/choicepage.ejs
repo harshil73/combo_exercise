@@ -6,22 +6,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" />
 </head>
+   <style>
 
+   </style>
 <body>
-    <h1>Hello plz choose the control to move forward</h1>
-    <select name="language_combo" id="language_combo">
-        <%for(i=0;i<data.length;i++){%>
-            <option value="<%=data[i].option%>">
-                <%=data[i].option%>
-            </option>
-            <%}%>
-    </select>
 
-   <!-- Select Languages:
-    <%for(i=0;i<data.length;i++){%>
-     <input type="checkbox"><%=data[i].option%>
-    <%}%> -->
+    <div class="main">
+        <h1>Create Form here</h1>
+        <div id="left" class="left">
+            <form action="/adddata" method="post">
+                <input type="text" placeholder="Question" name="ques">
+ <br>
+                <input type="text" id="optionValue" value="option" name="ans"> <br>
+                <div id="newOption"></div>
+                <input type="text" placeholder="Add Option" onclick="addOption()">
+                <select>
+                    <%for(i=0;i<data.length;i++){%>
+                        <option value="<%=data[i].option%>">
+                            <%=data[i].option%>
+                        </option>
+                        <%}%>
+                </select>
+                <input type="submit" value="Submit">  <br> <br>
+            </form>
+        </div>
+
+        <button onclick="addField()" id="btn"> <i class="fa-solid fa-circle-plus"></i></button>
+    </div>
 </body>
+<script>
+    function addField() {
+        let newDiv = document.createElement('div')
+        newDiv.innerHTML = `<input type="text" placeholder="Question"> <br>
+           <input type="text" id="optionValue" value="option"> <br>
+           <div id="newOption"></div>
+           <input type="text" id="addOption" placeholder="Add Option" onclick="addOption()">
+           <select>
+                <%for(i=0;i<data.length;i++){%>
+                    <option value="<%=data[i].option%>">
+                        <%=data[i].option%>
+                    </option>
+                    <%}%>
+            </select>  <br> <br>`
+        document.getElementById('left').appendChild(newDiv)
+    }
 
+    function addOption() {
+        let newP = document.createElement('p')
+        newP.innerHTML = ` <input type="text" id="optionValue" value="option" name="ans">`
+        document.getElementById('newOption').appendChild(newP)
+    }
+</script>
 </html>
